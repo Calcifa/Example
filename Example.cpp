@@ -95,44 +95,81 @@
 //	cout << dert << endl;
 //}
 /***********************************************************new生成三维数组************************************************************************/
-#include <iostream>
-#define X 7
-#define Y 4
-#define Z 2
+//#include <iostream>
+//#define X 7
+//#define Y 4
+//#define Z 2
+//using namespace std;
+//int main()
+//{
+//	int i, j, k;
+//	int*** max;
+//	max = new int** [X];
+//	for (i = 0; i < X; i++)
+//	{
+//		max[i] = new int* [Y];
+//		for (int j = 0; j < Y; j++)
+//		{
+//			max[i][j] = new int[Z];
+//		}
+//	}
+//	for (k = 0; k < Z; k++)
+//	{
+//		for (j = 0; j < Y; j++)
+//		{
+//			for (i = 0; i < X; i++)
+//			{
+//				max[i][j][k] = 4;
+//			}
+//		}
+//	}
+//	for (k = 0; k < Z; k++)
+//	{
+//		for (j = 0; j < Y; j++)
+//		{
+//			for (i = 0; i < X; i++)
+//			{
+//				cout << max[i][j][k] << "\t";
+//			}
+//			cout << endl;
+//		}
+//		cout << "----------------------------" << endl;
+//	}
+//}
+/***********************************************************tecplot三维柱坐标数据格式************************************************************************/
+#include<fstream>
+#include<cmath>
+#include<iostream>
+
+#define pi 3.1415926
+#define N_Theta 120
+#define N_R 50
+#define N_Z 50
+
 using namespace std;
+
 int main()
 {
 	int i, j, k;
-	int*** max;
-	max = new int** [X];
-	for (i = 0; i < X; i++)
+	ofstream fp("test.dat", ofstream::out);
+	fp << "TITLE = \"Test\"" << endl;
+	fp << "VARIABLES = \"Theta\",\"R\",\"Z\",\"Data\"" << endl;
+	fp << "ZONE T = \"Cirlcular zone\"" << endl;
+	fp << "I = " << N_R << ", J = " << N_Theta + 1 << ", K = " << N_Z << endl;
+	fp << "DATAPACKING = POINT" << endl;
+	double d_theta = 2 * pi / N_Theta;
+	for (k = 0; k < N_Z; k++)
 	{
-		max[i] = new int* [Y];
-		for (int j = 0; j < Y; j++)
+		for (j = 0; j < N_Theta + 1; j++)
 		{
-			max[i][j] = new int[Z];
-		}
-	}
-	for (k = 0; k < Z; k++)
-	{
-		for (j = 0; j < Y; j++)
-		{
-			for (i = 0; i < X; i++)
+			for (i = 0; i < N_R; i++)
 			{
-				max[i][j][k] = 4;
+				double data = i * 1e5;
+				double theta = j * d_theta;
+				double x = cos(theta) * i;
+				double y = sin(theta) * i;
+				fp << x << " " << y << " " << k << " " << data << endl;
 			}
 		}
-	}
-	for (k = 0; k < Z; k++)
-	{
-		for (j = 0; j < Y; j++)
-		{
-			for (i = 0; i < X; i++)
-			{
-				cout << max[i][j][k] << "\t";
-			}
-			cout << endl;
-		}
-		cout << "----------------------------" << endl;
 	}
 }
